@@ -1,0 +1,28 @@
+name:terraform
+
+run:
+	push:
+		branches:
+			-main
+
+jobs:
+	terraform:
+	runs-on: "ubuntu-latest"
+	steps:
+	-name: Checkout code
+	uses: actions/checkout@v4
+
+	-name: Setup terraform
+	uses: hashicorp/setup-terraform@v3
+
+	-name: Initialize terraform
+	uses: terraform init
+
+	-name: Format terraform
+	uses: terraform fmt -check
+
+	-name: Validate terraform
+	uses: terraform validate
+
+	-name: Plan terraform
+	uses: terraform plan
