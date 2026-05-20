@@ -57,12 +57,12 @@ resource "azurerm_container_app" "demo" {
 
   registry {
     server               = "myuniquedevopsacr.azurecr.io"
-    username             = azurerm_container_registry.demo.admin_username
+    username             = azurerm_container_registry.acr_demo.admin_username
     password_secret_name = "acr-password"
   }
 
   secret {
     name  = "acr-password"
-    value = azurerm_container_registry.demo.admin_password
+    value = azurerm_container_registry.acr_demo.admin_password
   }
 }
