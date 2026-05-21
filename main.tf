@@ -21,10 +21,16 @@ resource "azurerm_container_registry" "acr_demo" {
 	location= "australiacentral"
 	resource_group_name= azurerm_resource_group.demo.name
 	sku= "Standard"
-	admin_enabled= false    
-	depends_on = [
-   		 azurerm_container_registry.acr_demo
-	]
+	admin_enabled= true
+}
+
+data "azurerm_container_registry" "acr_demo" {
+  name                = azurerm_container_registry.acr_demo.name
+  resource_group_name = azurerm_resource_group.demo.name
+
+  depends_on = [
+    azurerm_container_registry.acr_demo
+  ]
 }
 
 resource "azurerm_container_app_environment" "demo" {
