@@ -21,7 +21,10 @@ resource "azurerm_container_registry" "acr_demo" {
 	location= "australiacentral"
 	resource_group_name= azurerm_resource_group.demo.name
 	sku= "Standard"
-	admin_enabled= true
+	admin_enabled= false    
+	depends_on = [
+   		 azurerm_container_registry.acr_demo
+	]
 }
 
 resource "azurerm_container_app_environment" "demo" {
@@ -56,13 +59,13 @@ resource "azurerm_container_app" "demo" {
   }
 
   registry {
-    server               = "myuniquedevopsacr.azurecr.io"
-    username             = azurerm_container_registry.acr_demo.admin_username
+    server               = data.azurerm_container_registry.acr_demo.login_server
+    username             = data.azurerm_container_registry.acr_demo.admin_username
     password_secret_name = "acr-password"
   }
 
   secret {
     name  = "acr-password"
-    value = azurerm_container_registry.acr_demo.admin_password
+    value = data.azurerm_container_registry.acr_demo.admin_password
   }
 }
