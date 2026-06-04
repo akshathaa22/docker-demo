@@ -19,7 +19,7 @@ pipeline {
 			echo 'Deploying..'
 		}
 	}
-	}
+	
 	
 	stage ('Checkout') {
 		steps {
@@ -42,6 +42,7 @@ pipeline {
 			sh 'docker push myuniquedevopsacr.azurecr.io/my-nginx-image:${BUILD_NUMBER}'
 		}
 	}
+}
 }
 
 
