@@ -4,7 +4,7 @@ pipeline {
 	stage ('Build') {
 		steps {
 			echo 'Building docker image...'
-			sh 'docker build -t nginx_img .'
+			bat 'docker build -t nginx_img .'
 		}
 	}
 
@@ -31,15 +31,15 @@ pipeline {
 	stage('Build docker image'){
 		steps {
 			echo 'building docker img..'
-			sh 'docker build -t myuniquedevopsacr.azurecr.io/my-nginx-image:${BUILD_NUMBER} .'
+			bat 'docker build -t myuniquedevopsacr.azurecr.io/my-nginx-image:%BUILD_NUMBER% .'
 		}
 	}
 
 	stage ('Push img to azure') {
 		steps {
 			echo 'pusing img to azure..'
-			sh 'az acr login --name myuniquedevopsacr'
-			sh 'docker push myuniquedevopsacr.azurecr.io/my-nginx-image:${BUILD_NUMBER}'
+			bat 'az acr login --name myuniquedevopsacr'
+			bat 'docker push myuniquedevopsacr.azurecr.io/my-nginx-image:%BUILD_NUMBER%'
 		}
 	}
 }
