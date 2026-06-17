@@ -1,54 +1,52 @@
 pipeline {
-	agent any
-	stages {
-	stage ('Build') {
-		steps {
-			echo 'Building docker image...'
-			bat 'docker build -t nginx_img .'
-		}
-	}
+    agent any
 
-	stage ('Test') {
-		steps {
-			echo 'Testing..'
-		}
-	}
+    stages {
 
-	stage ('Deploy') {
-		steps {
-			echo 'Deploying..'
-		}
-	}
-	
-	
-	stage ('Checkout') {
-		steps {
-			echo ('Checking out')
-			checkout scm
-		}
-	}
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
 
-	stage('Build docker image'){
-		steps {
-			echo 'building docker img..'
-			bat 'docker build -t myuniquedevopsacr.azurecr.io/my-nginx-image:%BUILD_NUMBER% .'
-		}
-	}
+        stage('Build Docker Image') {
+            steps {
+                echo 'Building Docker image...'
 
-	stage ('Push img to azure') {
-		steps {
-			echo 'pusing img to azure..'
-			bat 'az acr login --name myuniquedevopsacr'
-			bat 'docker push myuniquedevopsacr.azurecr.io/my-nginx-image:%BUILD_NUMBER%'
-		}
-	}
+                sh '''
+                docker build \
+                -t akshathaadevopsacr.azurecr.io/my-nginx-image:${BUILD_NUMBER} .
+                '''
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo 'Testing image...'
+
+                sh '''
+                docker images | grep my-nginx-image
+                '''
+            }
+        }
+
+        stage('Push Image To ACR') {
+            steps {
+                echo 'Pushing image to ACR...'
+
+                sh '''
+                az acr login --name akshathaadevopsacr
+
+                docker push \
+                 akshathaadevopsacr.azurecr.io/nginx_img:${BUILD_NUMBER}
+                '''
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                echo 'Deploy stage completed'
+            }
+        }
+    }
 }
-}
-
-
-
-
-
-
-
-
