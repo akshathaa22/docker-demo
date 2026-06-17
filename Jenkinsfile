@@ -38,7 +38,7 @@ pipeline {
                 az acr login --name akshathaadevopsacr
 
                 docker push \
-                 akshathaadevopsacr.azurecr.io/nginx_img:${BUILD_NUMBER}
+                 akshathaadevopsacr.azurecr.io/my-nginx-image:${BUILD_NUMBER}
                 '''
             }
         }
